@@ -1,27 +1,40 @@
 package main
 
+import _ "github.com/lib/pq"
 import (
+	"database/sql"
 	"fmt"
 	"os"
 
 	"github.com/Tikkaaa3/Gator/internal/config"
+	"github.com/Tikkaaa3/Gator/internal/database"
 )
 
 type state struct {
 	cfg *config.Config
+	db  *database.Queries
 }
 
 func main() {
 	cfg := config.Read()
+	db, err := sql.Open("postgres", cfg.DBUrl)
+	if err != nil {
+		fmt.Print(err)
+	}
+	dbQueries := database.New(db)
 	programState := &state{
 		cfg: &cfg,
+		db:  dbQueries,
 	}
 	commands := Commands{
 		CommandMap: make(map[string]func(*state, Command) error),
 	}
 	commands.Register("login", HandlerLogin)
+	commands.Register("register", handlerRegister)
+	commands.Register("reset", reset)
+	commands.Register("users", users)
 	commandName, args := os.Args[1], os.Args[2:]
-	if len(args) == 0 {
+	if len(args) == 0 && (commandName != "reset" && commandName != "users") {
 		fmt.Println("Command name is not given!")
 		os.Exit(1)
 	}
