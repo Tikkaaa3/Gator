@@ -76,7 +76,7 @@ func handlerRegister(state *state, cmd Command) error {
 	now := time.Now()
 
 	params := database.CreateUserParams{
-		ID:        uuid.NullUUID{UUID: id, Valid: true},
+		ID:        id,
 		CreatedAt: now,
 		UpdatedAt: now,
 		Name:      name,

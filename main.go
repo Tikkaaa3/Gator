@@ -33,8 +33,11 @@ func main() {
 	commands.Register("register", handlerRegister)
 	commands.Register("reset", reset)
 	commands.Register("users", users)
+	commands.Register("feeds", feeds)
+	commands.Register("agg", aggregator)
+	commands.Register("addfeed", addFeed)
 	commandName, args := os.Args[1], os.Args[2:]
-	if len(args) == 0 && (commandName != "reset" && commandName != "users") {
+	if len(args) == 0 && (commandName != "reset" && commandName != "users" && commandName != "agg" && commandName != "feeds") {
 		fmt.Println("Command name is not given!")
 		os.Exit(1)
 	}
