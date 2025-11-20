@@ -33,11 +33,14 @@ func main() {
 	commands.Register("register", handlerRegister)
 	commands.Register("reset", reset)
 	commands.Register("users", users)
-	commands.Register("feeds", feeds)
-	commands.Register("agg", aggregator)
-	commands.Register("addfeed", addFeed)
+	commands.Register("feeds", middlewareLoggedIn(feeds))
+	commands.Register("follow", middlewareLoggedIn(follow))
+	commands.Register("unfollow", middlewareLoggedIn(unfollow))
+	commands.Register("following", middlewareLoggedIn(following))
+	commands.Register("agg", middlewareLoggedIn(aggregator))
+	commands.Register("addfeed", middlewareLoggedIn(addFeed))
 	commandName, args := os.Args[1], os.Args[2:]
-	if len(args) == 0 && (commandName != "reset" && commandName != "users" && commandName != "agg" && commandName != "feeds") {
+	if len(args) == 0 && (commandName != "reset" && commandName != "users" && commandName != "agg" && commandName != "feeds" && commandName != "following") {
 		fmt.Println("Command name is not given!")
 		os.Exit(1)
 	}
